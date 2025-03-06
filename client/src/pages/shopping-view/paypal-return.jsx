@@ -3,8 +3,10 @@ import { capturePayment } from "@/store/shop/order-slice";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useLocation } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function PaypalReturnPage() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const location = useLocation();
   const params = new URLSearchParams(location.search);
@@ -27,7 +29,7 @@ function PaypalReturnPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Processing Payment...Please wait!</CardTitle>
+        <CardTitle>{t("Processing Payment...Please wait!")}</CardTitle>
       </CardHeader>
     </Card>
   );

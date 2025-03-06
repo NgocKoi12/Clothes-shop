@@ -1,22 +1,5 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner-1.webp";
-import bannerTwo from "../../assets/banner-2.webp";
-import bannerThree from "../../assets/banner-3.webp";
-import {
-  Airplay,
-  BabyIcon,
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  CloudLightning,
-  Heater,
-  Images,
-  Shirt,
-  ShirtIcon,
-  ShoppingBasket,
-  UmbrellaIcon,
-  WashingMachine,
-  WatchIcon,
-} from "lucide-react";
+import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -30,22 +13,34 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { useToast } from "@/components/ui/use-toast";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { getFeatureImages } from "@/store/common-slice";
+import { useTranslation } from "react-i18next";
+import WomanIcon from "@/lib/icons/woman";
+import ManIcon from "@/lib/icons/man";
+import KidIcon from "@/lib/icons/kid";
+import WatchIcon from "@/lib/icons/watch";
+import FootwearIcon from "@/lib/icons/footwear";
+import NikeIcon from "@/lib/icons/nike";
+import AdidasIcon from "@/lib/icons/adias";
+import PumaIcon from "@/lib/icons/puma";
+import DiorIcon from "@/lib/icons/dior";
+import ZaraIcon from "@/lib/icons/zara";
+import ChanelIcon from "@/lib/icons/chanel";
 
 const categoriesWithIcon = [
-  { id: "men", label: "Men", icon: ShirtIcon },
-  { id: "women", label: "Women", icon: CloudLightning },
-  { id: "kids", label: "Kids", icon: BabyIcon },
-  { id: "accessories", label: "Accessories", icon: WatchIcon },
-  { id: "footwear", label: "Footwear", icon: UmbrellaIcon },
+  { id: "men", label: "Nam", icon: ManIcon },
+  { id: "women", label: "Nữ", icon: WomanIcon },
+  { id: "kids", label: "Trẻ em", icon: KidIcon },
+  { id: "accessories", label: "Phụ kiện", icon: WatchIcon },
+  { id: "footwear", label: "Giày dép", icon: FootwearIcon },
 ];
 
 const brandsWithIcon = [
-  { id: "nike", label: "Nike", icon: Shirt },
-  { id: "adidas", label: "Adidas", icon: WashingMachine },
-  { id: "puma", label: "Puma", icon: ShoppingBasket },
-  { id: "levi", label: "Levi's", icon: Airplay },
-  { id: "zara", label: "Zara", icon: Images },
-  { id: "h&m", label: "H&M", icon: Heater },
+  { id: "nike", label: "Nike", icon: NikeIcon },
+  { id: "adidas", label: "Adidas", icon: AdidasIcon },
+  { id: "puma", label: "Puma", icon: PumaIcon },
+  { id: "dior", label: "Dior", icon: DiorIcon },
+  { id: "zara", label: "Zara", icon: ZaraIcon },
+  { id: "chanel", label: "Chanel", icon: ChanelIcon },
 ];
 function ShoppingHome() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -57,6 +52,8 @@ function ShoppingHome() {
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const { user } = useSelector((state) => state.auth);
+
+  const { t } = useTranslation();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -87,7 +84,7 @@ function ShoppingHome() {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
         toast({
-          title: "Product is added to cart",
+          title: t("Product is added to cart"),
         });
       }
     });
@@ -164,11 +161,12 @@ function ShoppingHome() {
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">
-            Shop by category
+            {t("Shop by category")}
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {categoriesWithIcon.map((categoryItem) => (
+            {categoriesWithIcon.map((categoryItem, index) => (
               <Card
+                key={index}
                 onClick={() =>
                   handleNavigateToListingPage(categoryItem, "category")
                 }
@@ -186,10 +184,13 @@ function ShoppingHome() {
 
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">Shop by Brand</h2>
+          <h2 className="text-3xl font-bold text-center mb-8">
+            {t("Shop by Brand")}
+          </h2>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {brandsWithIcon.map((brandItem) => (
+            {brandsWithIcon.map((brandItem, index) => (
               <Card
+                key={index}
                 onClick={() => handleNavigateToListingPage(brandItem, "brand")}
                 className="cursor-pointer hover:shadow-lg transition-shadow"
               >
@@ -206,12 +207,13 @@ function ShoppingHome() {
       <section className="py-12">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">
-            Feature Products
+            {t("Feature Products")}
           </h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
-              ? productList.map((productItem) => (
+              ? productList.map((productItem, index) => (
                   <ShoppingProductTile
+                    key={index}
                     handleGetProductDetails={handleGetProductDetails}
                     product={productItem}
                     handleAddtoCart={handleAddtoCart}

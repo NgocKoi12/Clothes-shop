@@ -2,9 +2,11 @@ import { AlignJustify, LogOut } from "lucide-react";
 import { Button } from "../ui/button";
 import { useDispatch } from "react-redux";
 import { logoutUser } from "@/store/auth-slice";
+import { useTranslation } from "react-i18next";
 
 function AdminHeader({ setOpen }) {
   const dispatch = useDispatch();
+  const { t } = useTranslation();
 
   function handleLogout() {
     dispatch(logoutUser());
@@ -22,7 +24,7 @@ function AdminHeader({ setOpen }) {
           className="inline-flex gap-2 items-center rounded-md px-4 py-2 text-sm font-medium shadow"
         >
           <LogOut />
-          Logout
+          {t("Logout")}
         </Button>
       </div>
     </header>

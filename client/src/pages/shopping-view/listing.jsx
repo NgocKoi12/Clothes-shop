@@ -20,6 +20,7 @@ import { ArrowUpDownIcon } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useSearchParams } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 function createSearchParamsHelper(filterParams) {
   const queryParams = [];
@@ -38,6 +39,7 @@ function createSearchParamsHelper(filterParams) {
 }
 
 function ShoppingListing() {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const { productList, productDetails } = useSelector(
     (state) => state.shopProducts
@@ -95,7 +97,7 @@ function ShoppingListing() {
         const getQuantity = getCartItems[indexOfCurrentItem].quantity;
         if (getQuantity + 1 > getTotalStock) {
           toast({
-            title: `Only ${getQuantity} quantity can be added for this item`,
+            title: `Chỉ có thể thêm tối đa ${getQuantity} sản phẩm cho mặt hàng này`,
             variant: "destructive",
           });
 
@@ -114,7 +116,7 @@ function ShoppingListing() {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
         toast({
-          title: "Product is added to cart",
+          title: t("Product is added to cart"),
         });
       }
     });
@@ -150,10 +152,10 @@ function ShoppingListing() {
       <ProductFilter filters={filters} handleFilter={handleFilter} />
       <div className="bg-background w-full rounded-lg shadow-sm">
         <div className="p-4 border-b flex items-center justify-between">
-          <h2 className="text-lg font-extrabold">All Products</h2>
+          <h2 className="text-lg font-extrabold">{t("All Products")}</h2>
           <div className="flex items-center gap-3">
             <span className="text-muted-foreground">
-              {productList?.length} Products
+              {productList?.length} {t("Products")}
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -163,7 +165,7 @@ function ShoppingListing() {
                   className="flex items-center gap-1"
                 >
                   <ArrowUpDownIcon className="h-4 w-4" />
-                  <span>Sort by</span>
+                  <span>{t("Sort by")}</span>
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-[200px]">
@@ -183,8 +185,9 @@ function ShoppingListing() {
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 p-4">
           {productList && productList.length > 0
-            ? productList.map((productItem) => (
+            ? productList.map((productItem, index) => (
                 <ShoppingProductTile
+                  key={index}
                   handleGetProductDetails={handleGetProductDetails}
                   product={productItem}
                   handleAddtoCart={handleAddtoCart}

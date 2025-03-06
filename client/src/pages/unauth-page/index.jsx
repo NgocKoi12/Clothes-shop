@@ -1,5 +1,8 @@
+import { useTranslation } from "react-i18next";
+
 function UnauthPage() {
-  return <h1>You don't have access to view this page</h1>;
+  const { t } = useTranslation();
+  return <h1>{t("You don't have access to view this page")}</h1>;
 }
 
 export default UnauthPage;

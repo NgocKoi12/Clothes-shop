@@ -11,6 +11,7 @@ import {
 } from "@/store/shop/address-slice";
 import AddressCard from "./address-card";
 import { useToast } from "../ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 const initialAddressFormData = {
   address: "",
@@ -27,6 +28,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
   const { user } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
   const { toast } = useToast();
+  const { t } = useTranslation();
 
   function handleManageAddress(event) {
     event.preventDefault();
@@ -34,7 +36,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
     if (addressList.length >= 3 && currentEditedId === null) {
       setFormData(initialAddressFormData);
       toast({
-        title: "You can add max 3 addresses",
+        title: t("You can add max 3 addresses"),
         variant: "destructive",
       });
 
@@ -54,7 +56,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
             setCurrentEditedId(null);
             setFormData(initialAddressFormData);
             toast({
-              title: "Address updated successfully",
+              title: t("Address updated successfully"),
             });
           }
         })
@@ -68,7 +70,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
             dispatch(fetchAllAddresses(user?.id));
             setFormData(initialAddressFormData);
             toast({
-              title: "Address added successfully",
+              title: t("Address added successfully"),
             });
           }
         });
@@ -81,7 +83,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
       if (data?.payload?.success) {
         dispatch(fetchAllAddresses(user?.id));
         toast({
-          title: "Address deleted successfully",
+          title: t("Address deleted successfully"),
         });
       }
     });
@@ -115,8 +117,9 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
     <Card>
       <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2  gap-2">
         {addressList && addressList.length > 0
-          ? addressList.map((singleAddressItem) => (
+          ? addressList.map((singleAddressItem, index) => (
               <AddressCard
+              key={index}
                 selectedId={selectedId}
                 handleDeleteAddress={handleDeleteAddress}
                 addressInfo={singleAddressItem}
@@ -128,7 +131,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
       </div>
       <CardHeader>
         <CardTitle>
-          {currentEditedId !== null ? "Edit Address" : "Add New Address"}
+          {currentEditedId !== null ? t("Edit Address") : t("Add New Address")}
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-3">
@@ -136,7 +139,7 @@ function Address({ setCurrentSelectedAddress, selectedId }) {
           formControls={addressFormControls}
           formData={formData}
           setFormData={setFormData}
-          buttonText={currentEditedId !== null ? "Edit" : "Add"}
+          buttonText={currentEditedId !== null ? t("Edit") : t("Add")}
           onSubmit={handleManageAddress}
           isBtnDisabled={!isFormValid()}
         />
