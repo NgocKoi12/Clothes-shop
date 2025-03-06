@@ -1,5 +1,6 @@
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
+import { useTranslation } from "react-i18next";
 
 function AdminProductTile({
   product,
@@ -8,6 +9,7 @@ function AdminProductTile({
   setCurrentEditedId,
   handleDelete,
 }) {
+  const { t } = useTranslation();
   return (
     <Card className="w-full max-w-sm mx-auto">
       <div>
@@ -41,9 +43,9 @@ function AdminProductTile({
               setFormData(product);
             }}
           >
-            Edit
+            {t("Edit")}
           </Button>
-          <Button onClick={() => handleDelete(product?._id)}>Delete</Button>
+          <Button onClick={() => handleDelete(product?._id)}>{t("Delete")}</Button>
         </CardFooter>
       </div>
     </Card>

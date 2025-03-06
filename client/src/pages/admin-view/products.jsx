@@ -18,6 +18,7 @@ import {
 } from "@/store/admin/products-slice";
 import { Fragment, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 const initialFormData = {
   image: null,
@@ -39,6 +40,8 @@ function AdminProducts() {
   const [uploadedImageUrl, setUploadedImageUrl] = useState("");
   const [imageLoadingState, setImageLoadingState] = useState(false);
   const [currentEditedId, setCurrentEditedId] = useState(null);
+
+  const { t } = useTranslation();
 
   const { productList } = useSelector((state) => state.adminProducts);
   const dispatch = useDispatch();
@@ -75,7 +78,7 @@ function AdminProducts() {
             setImageFile(null);
             setFormData(initialFormData);
             toast({
-              title: "Product add successfully",
+              title: t("Product add successfully"),
             });
           }
         });
@@ -106,13 +109,14 @@ function AdminProducts() {
     <Fragment>
       <div className="mb-5 w-full flex justify-end">
         <Button onClick={() => setOpenCreateProductsDialog(true)}>
-          Add New Product
+          {t("Add New Product")}
         </Button>
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
         {productList && productList.length > 0
-          ? productList.map((productItem) => (
+          ? productList.map((productItem, index) => (
               <AdminProductTile
+                key={index}
                 setFormData={setFormData}
                 setOpenCreateProductsDialog={setOpenCreateProductsDialog}
                 setCurrentEditedId={setCurrentEditedId}
@@ -133,7 +137,7 @@ function AdminProducts() {
         <SheetContent side="right" className="overflow-auto">
           <SheetHeader>
             <SheetTitle>
-              {currentEditedId !== null ? "Edit Product" : "Add New Product"}
+              {currentEditedId !== null ? t("Edit Product") : t("Add New Product")}
             </SheetTitle>
           </SheetHeader>
           <ProductImageUpload
@@ -150,7 +154,7 @@ function AdminProducts() {
               onSubmit={onSubmit}
               formData={formData}
               setFormData={setFormData}
-              buttonText={currentEditedId !== null ? "Edit" : "Add"}
+              buttonText={currentEditedId !== null ? t("Edit") : t("Add")}
               formControls={addProductFormElements}
               isBtnDisabled={!isFormValid()}
             />

@@ -23,6 +23,7 @@ import UserCartWrapper from "./cart-wrapper";
 import { useEffect, useState } from "react";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
+import { useTranslation } from "react-i18next";
 
 function MenuItems() {
   const navigate = useNavigate();
@@ -65,6 +66,7 @@ function MenuItems() {
 }
 
 function HeaderRightContent() {
+  const { t } = useTranslation();
   const { user } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const [openCartSheet, setOpenCartSheet] = useState(false);
@@ -94,7 +96,7 @@ function HeaderRightContent() {
           <span className="absolute top-[-5px] right-[2px] font-bold text-sm">
             {cartItems?.items?.length || 0}
           </span>
-          <span className="sr-only">User cart</span>
+          <span className="sr-only">{t("User cart")}</span>
         </Button>
         <UserCartWrapper
           setOpenCartSheet={setOpenCartSheet}
@@ -115,16 +117,16 @@ function HeaderRightContent() {
           </Avatar>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" className="w-56">
-          <DropdownMenuLabel>Logged in as {user?.userName}</DropdownMenuLabel>
+          <DropdownMenuLabel>{t("Logged in as")} {user?.userName}</DropdownMenuLabel>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={() => navigate("/shop/account")}>
             <UserCog className="mr-2 h-4 w-4" />
-            Account
+            {t("Account")}
           </DropdownMenuItem>
           <DropdownMenuSeparator />
           <DropdownMenuItem onClick={handleLogout}>
             <LogOut className="mr-2 h-4 w-4" />
-            Logout
+            {t("Logout")}
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>

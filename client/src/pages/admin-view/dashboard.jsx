@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { addFeatureImage, getFeatureImages } from "@/store/common-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
 function AdminDashboard() {
   const [imageFile, setImageFile] = useState(null);
@@ -11,7 +12,7 @@ function AdminDashboard() {
   const dispatch = useDispatch();
   const { featureImageList } = useSelector((state) => state.commonFeature);
 
-  console.log(uploadedImageUrl, "uploadedImageUrl");
+  const { t } = useTranslation();
 
   function handleUploadFeatureImage() {
     dispatch(addFeatureImage(uploadedImageUrl)).then((data) => {
@@ -42,7 +43,7 @@ function AdminDashboard() {
         // isEditMode={currentEditedId !== null}
       />
       <Button onClick={handleUploadFeatureImage} className="mt-5 w-full">
-        Upload
+        {t("Upload")}
       </Button>
       <div className="flex flex-col gap-4 mt-5">
         {featureImageList && featureImageList.length > 0

@@ -12,8 +12,10 @@ import { Label } from "../ui/label";
 import StarRatingComponent from "../common/star-rating";
 import { useEffect, useState } from "react";
 import { addReview, getReviews } from "@/store/shop/review-slice";
+import { useTranslation } from "react-i18next";
 
 function ProductDetailsDialog({ open, setOpen, productDetails }) {
+  const { t } = useTranslation();
   const [reviewMsg, setReviewMsg] = useState("");
   const [rating, setRating] = useState(0);
   const dispatch = useDispatch();
@@ -40,7 +42,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
         const getQuantity = getCartItems[indexOfCurrentItem].quantity;
         if (getQuantity + 1 > getTotalStock) {
           toast({
-            title: `Only ${getQuantity} quantity can be added for this item`,
+            title: `Chỉ có thể thêm tối đa ${getQuantity} sản phẩm cho mặt hàng này`,
             variant: "destructive",
           });
 
@@ -58,7 +60,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
       if (data?.payload?.success) {
         dispatch(fetchCartItems(user?.id));
         toast({
-          title: "Product is added to cart",
+          title: t("Product is added to cart"),
         });
       }
     });
@@ -86,7 +88,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
         setReviewMsg("");
         dispatch(getReviews(productDetails?._id));
         toast({
-          title: "Review added successfully!",
+          title: t("Review added successfully!"),
         });
       }
     });
@@ -148,7 +150,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
           <div className="mt-5 mb-5">
             {productDetails?.totalStock === 0 ? (
               <Button className="w-full opacity-60 cursor-not-allowed">
-                Out of Stock
+                {t("Out of Stock")}
               </Button>
             ) : (
               <Button
@@ -160,7 +162,7 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                   )
                 }
               >
-                Add to Cart
+                {t("Add to Cart")}
               </Button>
             )}
           </div>
@@ -169,8 +171,8 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
             <h2 className="text-xl font-bold mb-4">Reviews</h2>
             <div className="grid gap-6">
               {reviews && reviews.length > 0 ? (
-                reviews.map((reviewItem) => (
-                  <div className="flex gap-4">
+                reviews.map((reviewItem, index) => (
+                  <div key={index} className="flex gap-4">
                     <Avatar className="w-10 h-10 border">
                       <AvatarFallback>
                         {reviewItem?.userName[0].toUpperCase()}
@@ -190,11 +192,11 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                   </div>
                 ))
               ) : (
-                <h1>No Reviews</h1>
+                <h1>{t("No Reviews")}</h1>
               )}
             </div>
             <div className="mt-10 flex-col flex gap-2">
-              <Label>Write a review</Label>
+              <Label>{t("Write a review")}</Label>
               <div className="flex gap-1">
                 <StarRatingComponent
                   rating={rating}
@@ -205,13 +207,13 @@ function ProductDetailsDialog({ open, setOpen, productDetails }) {
                 name="reviewMsg"
                 value={reviewMsg}
                 onChange={(event) => setReviewMsg(event.target.value)}
-                placeholder="Write a review..."
+                placeholder="Viết đánh giá..."
               />
               <Button
                 onClick={handleAddReview}
                 disabled={reviewMsg.trim() === ""}
               >
-                Submit
+                {t("Submit")}
               </Button>
             </div>
           </div>

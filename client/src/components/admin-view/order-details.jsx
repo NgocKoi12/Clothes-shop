@@ -11,6 +11,7 @@ import {
   updateOrderStatus,
 } from "@/store/admin/order-slice";
 import { useToast } from "../ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 const initialFormData = {
   status: "",
@@ -21,6 +22,8 @@ function AdminOrderDetailsView({ orderDetails }) {
   const { user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const { toast } = useToast();
+
+  const { t } = useTranslation();
 
   console.log(orderDetails, "orderDetailsorderDetails");
 
@@ -47,27 +50,27 @@ function AdminOrderDetailsView({ orderDetails }) {
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
-            <p className="font-medium">Order ID</p>
+            <p className="font-medium">{t("Order ID")}</p>
             <Label>{orderDetails?._id}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
-            <p className="font-medium">Order Date</p>
+            <p className="font-medium">{t("Order Date")}</p>
             <Label>{orderDetails?.orderDate.split("T")[0]}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
-            <p className="font-medium">Order Price</p>
+            <p className="font-medium">{t("Order Price")}</p>
             <Label>${orderDetails?.totalAmount}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
-            <p className="font-medium">Payment method</p>
+            <p className="font-medium">{t("Payment method")}</p>
             <Label>{orderDetails?.paymentMethod}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
-            <p className="font-medium">Payment Status</p>
+            <p className="font-medium">{t("Payment Status")}</p>
             <Label>{orderDetails?.paymentStatus}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
-            <p className="font-medium">Order Status</p>
+            <p className="font-medium">{t("Order Status")}</p>
             <Label>
               <Badge
                 className={`py-1 px-3 ${
@@ -86,14 +89,14 @@ function AdminOrderDetailsView({ orderDetails }) {
         <Separator />
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <div className="font-medium">Order Details</div>
+            <div className="font-medium">{t("Order Details")}</div>
             <ul className="grid gap-3">
               {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
-                ? orderDetails?.cartItems.map((item) => (
-                    <li className="flex items-center justify-between">
-                      <span>Title: {item.title}</span>
-                      <span>Quantity: {item.quantity}</span>
-                      <span>Price: ${item.price}</span>
+                ? orderDetails?.cartItems.map((item, index) => (
+                    <li key={index} className="flex items-center justify-between">
+                      <span>Tên: {item.title}</span>
+                      <span>Số lượng: {item.quantity}</span>
+                      <span>Giá thành: ${item.price}</span>
                     </li>
                   ))
                 : null}
@@ -102,7 +105,7 @@ function AdminOrderDetailsView({ orderDetails }) {
         </div>
         <div className="grid gap-4">
           <div className="grid gap-2">
-            <div className="font-medium">Shipping Info</div>
+            <div className="font-medium">{t("Shipping Info")}</div>
             <div className="grid gap-0.5 text-muted-foreground">
               <span>{user.userName}</span>
               <span>{orderDetails?.addressInfo?.address}</span>
@@ -118,21 +121,21 @@ function AdminOrderDetailsView({ orderDetails }) {
           <CommonForm
             formControls={[
               {
-                label: "Order Status",
+                label: "Trạng thái đơn hàng",
                 name: "status",
                 componentType: "select",
                 options: [
-                  { id: "pending", label: "Pending" },
-                  { id: "inProcess", label: "In Process" },
-                  { id: "inShipping", label: "In Shipping" },
-                  { id: "delivered", label: "Delivered" },
-                  { id: "rejected", label: "Rejected" },
+                  { id: "pending", label: "Đang chờ" },
+                  { id: "inProcess", label: "Trong quá trình xử lý" },
+                  { id: "inShipping", label: "Đang giao hàng" },
+                  { id: "delivered", label: "Đã giao hàng" },
+                  { id: "rejected", label: "Bị từ chối" },
                 ],
               },
             ]}
             formData={formData}
             setFormData={setFormData}
-            buttonText={"Update Order Status"}
+            buttonText={"Cập nhật trạng thái đơn hàng"}
             onSubmit={handleUpdateStatus}
           />
         </div>

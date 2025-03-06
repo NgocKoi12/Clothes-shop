@@ -18,8 +18,10 @@ import {
   resetOrderDetails,
 } from "@/store/admin/order-slice";
 import { Badge } from "../ui/badge";
+import { useTranslation } from "react-i18next";
 
 function AdminOrdersView() {
+  const { t } = useTranslation();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
   const dispatch = useDispatch();
@@ -41,25 +43,25 @@ function AdminOrdersView() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>All Orders</CardTitle>
+        <CardTitle>{t("All Orders")}</CardTitle>
       </CardHeader>
       <CardContent>
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead>Order ID</TableHead>
-              <TableHead>Order Date</TableHead>
-              <TableHead>Order Status</TableHead>
-              <TableHead>Order Price</TableHead>
+              <TableHead>{t("Order ID")}</TableHead>
+              <TableHead>{t("Order Date")}</TableHead>
+              <TableHead>{t("Order Status")}</TableHead>
+              <TableHead>{t("Order Price")}</TableHead>
               <TableHead>
-                <span className="sr-only">Details</span>
+                <span className="sr-only">{t("Details")}</span>
               </TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {orderList && orderList.length > 0
-              ? orderList.map((orderItem) => (
-                  <TableRow>
+              ? orderList.map((orderItem, index) => (
+                  <TableRow key={index}>
                     <TableCell>{orderItem?._id}</TableCell>
                     <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
                     <TableCell>
@@ -89,7 +91,7 @@ function AdminOrdersView() {
                             handleFetchOrderDetails(orderItem?._id)
                           }
                         >
-                          View Details
+                          {t("View Details")}
                         </Button>
                         <AdminOrderDetailsView orderDetails={orderDetails} />
                       </Dialog>

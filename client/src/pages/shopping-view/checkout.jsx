@@ -7,6 +7,7 @@ import { useState } from "react";
 import { createNewOrder } from "@/store/shop/order-slice";
 import { Navigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { useTranslation } from "react-i18next";
 
 function ShoppingCheckout() {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -16,6 +17,8 @@ function ShoppingCheckout() {
   const [isPaymentStart, setIsPaymemntStart] = useState(false);
   const dispatch = useDispatch();
   const { toast } = useToast();
+
+  const { t } = useTranslation();
 
   console.log(currentSelectedAddress, "cartItems");
 
@@ -35,7 +38,7 @@ function ShoppingCheckout() {
   function handleInitiatePaypalPayment() {
     if (cartItems.length === 0) {
       toast({
-        title: "Your cart is empty. Please add items to proceed",
+        title: t("Your cart is empty. Please add items to proceed"),
         variant: "destructive",
       });
 
@@ -43,7 +46,7 @@ function ShoppingCheckout() {
     }
     if (currentSelectedAddress === null) {
       toast({
-        title: "Please select one address to proceed.",
+        title: t("Please select one address to proceed."),
         variant: "destructive",
       });
 
@@ -107,21 +110,21 @@ function ShoppingCheckout() {
         />
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
-            ? cartItems.items.map((item) => (
-                <UserCartItemsContent cartItem={item} />
+            ? cartItems.items.map((item, index) => (
+                <UserCartItemsContent key={index} cartItem={item} />
               ))
             : null}
           <div className="mt-8 space-y-4">
             <div className="flex justify-between">
-              <span className="font-bold">Total</span>
+              <span className="font-bold">{t("Total")}</span>
               <span className="font-bold">${totalCartAmount}</span>
             </div>
           </div>
           <div className="mt-4 w-full">
             <Button onClick={handleInitiatePaypalPayment} className="w-full">
               {isPaymentStart
-                ? "Processing Paypal Payment..."
-                : "Checkout with Paypal"}
+                ? t("Processing Paypal Payment...")
+                : t("Checkout with Paypal")}
             </Button>
           </div>
         </div>

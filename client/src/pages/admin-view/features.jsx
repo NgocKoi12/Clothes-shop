@@ -1,5 +1,5 @@
 function AdminFeatures() {
-  return <div>admin features</div>;
+  return <div>This site is under construction.</div>;
 }
 
 export default AdminFeatures;
