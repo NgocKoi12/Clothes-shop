@@ -25,7 +25,6 @@ function AdminOrderDetailsView({ orderDetails }) {
 
   const { t } = useTranslation();
 
-  console.log(orderDetails, "orderDetailsorderDetails");
 
   function handleUpdateStatus(event) {
     event.preventDefault();

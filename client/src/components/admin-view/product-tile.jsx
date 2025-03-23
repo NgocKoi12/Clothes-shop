@@ -1,6 +1,8 @@
+import { useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 function AdminProductTile({
   product,
@@ -10,12 +12,37 @@ function AdminProductTile({
   handleDelete,
 }) {
   const { t } = useTranslation();
+
+  const [imageSrc, setImageSrc] = useState(null);
+
+  const getImage = async () => {
+    try {
+      const response = await axios.get(
+        `http://localhost:5000/api/admin/files/image/${product?.image}`,
+        { responseType: 'blob' }
+      );
+      const imageUrl = URL.createObjectURL(response.data);
+      setImageSrc(imageUrl);
+      console.log(response)
+    } catch (error) {
+      console.error('Error fetching the image:', error);
+    }
+  };
+
+  useEffect(() => {
+    if (product?.image) {
+      getImage();
+    }
+  }, [product?.image]);
+
+  console.log(imageSrc)
+
   return (
     <Card className="w-full max-w-sm mx-auto">
       <div>
         <div className="relative">
           <img
-            src={product?.image}
+            src={imageSrc}
             alt={product?.title}
             className="w-full h-[300px] object-cover rounded-t-lg"
           />
@@ -45,7 +72,9 @@ function AdminProductTile({
           >
             {t("Edit")}
           </Button>
-          <Button onClick={() => handleDelete(product?._id)}>{t("Delete")}</Button>
+          <Button onClick={() => handleDelete(product?._id)}>
+            {t("Delete")}
+          </Button>
         </CardFooter>
       </div>
     </Card>

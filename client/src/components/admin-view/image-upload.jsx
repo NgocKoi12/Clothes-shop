@@ -11,8 +11,8 @@ function ProductImageUpload({
   imageFile,
   setImageFile,
   imageLoadingState,
-  uploadedImageUrl,
-  setUploadedImageUrl,
+  uploadedImageData,
+  setUploadedImageData,
   setImageLoadingState,
   isEditMode,
   isCustomStyling = false,
@@ -20,13 +20,8 @@ function ProductImageUpload({
   const inputRef = useRef(null);
   const { t } = useTranslation();
 
-  console.log(isEditMode, "isEditMode");
-
   function handleImageFileChange(event) {
-    console.log(event.target.files, "event.target.files");
     const selectedFile = event.target.files?.[0];
-    console.log(selectedFile);
-
     if (selectedFile) setImageFile(selectedFile);
   }
 
@@ -47,24 +42,23 @@ function ProductImageUpload({
     }
   }
 
-  async function uploadImageToCloudinary() {
+  async function uploadImageToDB() {
     setImageLoadingState(true);
     const data = new FormData();
-    data.append("my_file", imageFile);
+    data.append("file", imageFile);
     const response = await axios.post(
-      "http://localhost:5000/api/admin/products/upload-image",
+      "http://localhost:5000/api/admin/files/upload",
       data
     );
-    console.log(response, "response");
 
-    if (response?.data?.success) {
-      setUploadedImageUrl(response.data.result.url);
+    if (response?.status === 201) {
+      setUploadedImageData(response.data.data);
       setImageLoadingState(false);
     }
   }
 
   useEffect(() => {
-    if (imageFile !== null) uploadImageToCloudinary();
+    if (imageFile !== null) uploadImageToDB();
   }, [imageFile]);
 
   return (

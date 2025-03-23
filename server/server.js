@@ -13,6 +13,8 @@ const shopOrderRouter = require("./routes/shop/order-routes");
 const shopSearchRouter = require("./routes/shop/search-routes");
 const shopReviewRouter = require("./routes/shop/review-routes");
 
+const fileRoutes = require("./routes/admin/file-routes");
+
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
 //create a database connection -> u can also
@@ -46,6 +48,8 @@ app.use(express.json());
 app.use("/api/auth", authRouter);
 app.use("/api/admin/products", adminProductsRouter);
 app.use("/api/admin/orders", adminOrderRouter);
+
+app.use("/api/admin/files", fileRoutes);
 
 app.use("/api/shop/products", shopProductsRouter);
 app.use("/api/shop/cart", shopCartRouter);
